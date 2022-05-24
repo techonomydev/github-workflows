@@ -1,0 +1,46 @@
+name: Frontend build
+on:
+  workflow_call:
+    inputs:
+      working_directory:
+        type: string
+        required: false
+        default: "."
+      artifact_name:
+        type: string
+        required: true
+      artifact_path:
+        type: string
+        required: true
+      node_version:
+        type: string
+        required: true
+    secrets:
+      PACKAGE_GITHUB_TOKEN:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          path: ${{ inputs.checkout_path }}
+      - name: Setup node ${{ inputs.node_version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node_version }}
+      - name: Install frontend dependencies
+        run: |
+          npx yarn config set @techonomydev:registry https://npm.pkg.github.com/
+          npm set https://npm.pkg.github.com/:_authToken ${{ secrets.PACKAGE_GITHUB_TOKEN }}
+          cd ${{ inputs.working_directory }} && npx yarn install
+      - name: Build frontend artifacts
+        run: |
+          cd ${{ inputs.working_directory }} && npx yarn build
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: ${{ inputs.artifact_path }}

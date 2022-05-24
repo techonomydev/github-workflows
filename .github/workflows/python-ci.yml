@@ -1,0 +1,62 @@
+name: Python CI
+on:
+  workflow_call:
+    inputs:
+      name:
+        type: string
+        required: true
+      python_version:
+        type: string
+        required: true
+    secrets:
+      TECHONOMY_REPO_GITHUB_TOKEN:
+        required: true
+
+defaults:
+  run:
+    working-directory: ./src
+
+jobs:
+  linting-and-tests:
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ${{ inputs.name }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          path: ./src
+      - name: Set up Python ${{ inputs.python_version }}
+        uses: actions/setup-python@v2
+        with:
+           python-version: '${{ inputs.python_version }}'
+      - name: Setup ssh:// to https:// mapping with a token
+        run: |
+          git config --global url."https://${{ secrets.TECHONOMY_REPO_GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+      - name: Install python dependencies
+        run: |
+          pip3 install pip==22.0.3
+          pip3 install poetry
+          make install
+      - name: Lint with flake8 (black and isort)
+        run: |
+          source $(poetry env info --path)/bin/activate
+          make lint
+      - name: Run the testsuite
+        env:
+          DATABASE_URL: 'postgres://postgres:postgres@localhost/${{ inputs.name }}'
+        run: |
+          source $(poetry env info --path)/bin/activate
+          make test

@@ -1,0 +1,31 @@
+name: Frontend CI
+on:
+  workflow_call:
+    inputs:
+      working_directory:
+        type: string
+        required: false
+        default: "."
+      node_version:
+        type: string
+        required: true
+
+jobs:
+  linting-and-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+      - name: Setup node ${{ inputs.node_version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node_version }}
+      - name: Install frontend dependencies
+        run: |
+          cd ${{ inputs.working_directory }} && npx yarn install
+      - name: Lint with prettier
+        run: |
+          cd ${{ inputs.working_directory }} && npx yarn lint
+      - name: Test with jest
+        run: |
+          cd ${{ inputs.working_directory }} && npx yarn test
