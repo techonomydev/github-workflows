@@ -9,6 +9,9 @@ on:
       node_version:
         type: string
         required: true
+    secrets:
+      PACKAGE_GITHUB_TOKEN:
+        required: true
 
 jobs:
   linting-and-tests:
@@ -22,6 +25,8 @@ jobs:
           node-version: ${{ inputs.node_version }}
       - name: Install frontend dependencies
         run: |
+          npx yarn config set @techonomydev:registry https://npm.pkg.github.com/
+          npm set https://npm.pkg.github.com/:_authToken ${{ secrets.PACKAGE_GITHUB_TOKEN }}
           cd ${{ inputs.working_directory }} && npx yarn install
       - name: Lint with prettier
         run: |
