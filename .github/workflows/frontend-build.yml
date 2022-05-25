@@ -35,7 +35,7 @@ jobs:
           node-version: ${{ inputs.node_version }}
       - name: Setup ssh:// to https:// mapping with a token
         run: |
-          exec git config --global url."https://${{ secrets.TECHONOMY_REPO_GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+          git config --global url."https://${{ secrets.TECHONOMY_REPO_GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
       - name: Install frontend dependencies
         run: |
           npx yarn config set @techonomydev:registry https://npm.pkg.github.com/
