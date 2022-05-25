@@ -25,13 +25,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node_version }}
-      - name: Setup ssh:// to https:// mapping with a token
-        run: |
-          git config --global url."https://${{ secrets.TECHONOMY_REPO_GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
-      - name: Install frontend dependencies
+      - name: Configure NPM package repository
         run: |
           npx yarn config set @techonomydev:registry https://npm.pkg.github.com/
           npm set https://npm.pkg.github.com/:_authToken ${{ secrets.PACKAGE_GITHUB_TOKEN }}
+      - name: Configure git
+        run: |
+          git config --global url."https://${{ secrets.TECHNONOMY_REPO_GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
+      - name: Install front-end dependencies
+        run: |
           cd ${{ inputs.working_directory }} && npx yarn install
       - name: Lint with prettier
         run: |
