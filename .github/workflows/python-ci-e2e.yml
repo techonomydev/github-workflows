@@ -1,4 +1,4 @@
-name: Python CI
+name: Python CI with E2E
 on:
   workflow_call:
     inputs:
@@ -8,6 +8,10 @@ on:
       python_version:
         type: string
         required: true
+      artifact_name:
+        type: string
+      artifact_path:
+        type: string
     secrets:
       TECHONOMY_REPO_GITHUB_TOKEN:
         required: true
@@ -32,6 +36,11 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
+      - name: Download static files
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: ${{ inputs.artifact_path }}
       - name: Set up Python ${{ inputs.python_version }}
         uses: actions/setup-python@v2
         with:
@@ -54,3 +63,11 @@ jobs:
         run: |
           source $(poetry env info --path)/bin/activate
           make test
+      - name: Run the e2e testsuite
+        env:
+          DATABASE_URL: 'postgres://postgres:postgres@localhost/${{ inputs.name }}'
+        run: |
+          source $(poetry env info --path)/bin/activate
+          poetry install -E playwright
+          playwright install chromium
+          pytest tests/e2e/**
