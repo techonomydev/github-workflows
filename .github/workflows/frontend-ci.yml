@@ -34,10 +34,10 @@ jobs:
           git config --global url."https://${{ secrets.TECHNONOMY_REPO_GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
       - name: Install front-end dependencies
         run: |
-          cd ${{ inputs.working_directory }} && npx yarn install
+          npx yarn --cwd ${{ inputs.working_directory }} install
       - name: Lint with prettier
         run: |
-          cd ${{ inputs.working_directory }} && npx yarn lint
+          npx yarn --cwd ${{ inputs.working_directory }} lint
       - name: Test with jest
         run: |
-          cd ${{ inputs.working_directory }} && npx yarn test
+          npx yarn --cwd ${{ inputs.working_directory }} test
