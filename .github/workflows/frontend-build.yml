@@ -45,7 +45,8 @@ jobs:
         run: |
           npx yarn --cwd  ${{ inputs.working_directory }} build
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.artifact_name }}
           path: ${{ inputs.artifact_path }}
+          retention-days: 7
