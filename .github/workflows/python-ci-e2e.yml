@@ -70,4 +70,4 @@ jobs:
           source $(poetry env info --path)/bin/activate
           poetry install -E playwright
           playwright install chromium
-          pytest tests/e2e/**
+          pytest tests/e2e/
