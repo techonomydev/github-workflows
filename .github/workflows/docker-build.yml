@@ -13,7 +13,7 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
-      TECHONOMY_REPO_GITHUB_TOKEN:
+      TECHONOMY_REPOS_GITHUB_TOKEN:
         required: false
 
 jobs:
@@ -38,6 +38,6 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
         DOCKER_BUILDKIT: 1
       run: |
-        echo ${{ secrets.TECHONOMY_REPO_GITHUB_TOKEN }} > ./.GITHUB_TOKEN
+        echo ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }} > ./.GITHUB_TOKEN
         docker build --secret id=github_token,src=./.GITHUB_TOKEN --build-arg DJANGO_SETTINGS_MODULE="${{ inputs.django_settings_module }}" -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest . -f etc/docker/Dockerfile
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

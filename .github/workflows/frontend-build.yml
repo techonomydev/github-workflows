@@ -18,7 +18,7 @@ on:
     secrets:
       PACKAGE_GITHUB_TOKEN:
         required: true
-      TECHONOMY_REPO_GITHUB_TOKEN:
+      TECHONOMY_REPOS_GITHUB_TOKEN:
         required: true
 
 jobs:
@@ -37,7 +37,7 @@ jobs:
           npm set https://npm.pkg.github.com/:_authToken ${{ secrets.PACKAGE_GITHUB_TOKEN }}
       - name: Configure git
         run: |
-          git config --global url."https://${{ secrets.TECHNONOMY_REPO_GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          git config --global url."https://${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
       - name: Install frontend dependencies
         run: |
           npx yarn --cwd  ${{ inputs.working_directory }} install

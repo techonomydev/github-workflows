@@ -9,7 +9,7 @@ on:
         type: string
         required: true
     secrets:
-      TECHONOMY_REPO_GITHUB_TOKEN:
+      TECHONOMY_REPOS_GITHUB_TOKEN:
         required: true
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
            python-version: '${{ inputs.python_version }}'
       - name: Setup ssh:// to https:// mapping with a token
         run: |
-          git config --global url."https://${{ secrets.TECHONOMY_REPO_GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+          git config --global url."https://${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
       - name: Install python dependencies
         run: |
           pip3 install pip==22.0.3
