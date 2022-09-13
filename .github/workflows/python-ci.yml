@@ -42,7 +42,7 @@ jobs:
       - name: Install python dependencies
         run: |
           pip3 install pip==22.0.3
-          pip3 install poetry<1.2
+          pip3 install "poetry<1.2"
           make install
       - name: Lint with flake8 (black and isort)
         run: |
