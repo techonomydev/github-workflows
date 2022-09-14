@@ -41,8 +41,7 @@ jobs:
           git config --global url."https://${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
       - name: Install python dependencies
         run: |
-          pip3 install pip==22.0.3
-          pip3 install "poetry<1.2"
+          pip3 install -r https://raw.githubusercontent.com/techonomydev/github-workflows/master/bootstrap-requirements.txt
           make install
       - name: Lint with flake8 (black and isort)
         run: |
