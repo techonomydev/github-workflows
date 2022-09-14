@@ -2,7 +2,7 @@
 
 Opinionated GitHub reusable workflow templates.
 
-## Usage
+## Usage examples
 
 ```yaml
 name: CI
@@ -19,4 +19,14 @@ jobs:
     with:
       working_directory: frontend
       node_version: 16.14
+
+  python:
+    needs: frontend-build
+    uses: techonomydev/github-workflows/.github/workflows/python-ci-e2e.yml@master
+    with:
+      name: my-project
+      artifact_name: static
+      artifact_path: src/bmy_project/static/bmy_project
+      python_version: 3.9.13
+
 ```
