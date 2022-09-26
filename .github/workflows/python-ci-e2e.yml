@@ -50,8 +50,11 @@ jobs:
           git config --global url."https://${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
       - name: Install additional software
         run: |
+          apt-get update -y
           apt-get install -y libssl-dev libcurl4-openssl-dev
       - name: Install python dependencies
+        env:
+          PYCURL_SSL_LIBRARY: openssl
         run: |
           pip3 install -r https://raw.githubusercontent.com/techonomydev/github-workflows/master/bootstrap-requirements.txt
           make install
