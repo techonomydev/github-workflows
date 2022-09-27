@@ -71,6 +71,7 @@ jobs:
       - name: Run the e2e testsuite
         env:
           DATABASE_URL: 'postgres://postgres:postgres@localhost/${{ inputs.name }}'
+          DJANGO_ALLOW_ASYNC_UNSAFE: true
         run: |
           source $(poetry env info --path)/bin/activate
           poetry install -E playwright
