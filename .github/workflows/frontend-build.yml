@@ -44,6 +44,8 @@ jobs:
       - name: Build frontend artifacts
         run: |
           npx yarn --cwd  ${{ inputs.working_directory }} build
+        env:
+          DISABLE_ESLINT_PLUGIN: true
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
