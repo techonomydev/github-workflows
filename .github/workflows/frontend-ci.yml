@@ -20,7 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}
       - name: Setup node ${{ inputs.node_version }}
         uses: actions/setup-node@v3
         with:
@@ -31,7 +33,7 @@ jobs:
           npm set https://npm.pkg.github.com/:_authToken ${{ secrets.PACKAGE_GITHUB_TOKEN }}
       - name: Configure git
         run: |
-          git config --global url."https://${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          git config --global url."https://${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}@github.com/".insteadOf git@github.com:
       - name: Install front-end dependencies
         run: |
           npx yarn --cwd ${{ inputs.working_directory }} install
