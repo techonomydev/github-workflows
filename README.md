@@ -2,6 +2,9 @@
 
 Opinionated GitHub reusable workflow templates.
 
+- Current production branch: `master`
+- Newest versions (pip/poetry) branch: `next`
+
 ## Usage examples
 
 ```yaml
