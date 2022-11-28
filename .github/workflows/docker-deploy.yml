@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up Python ${{ inputs.python_version }}
         uses: actions/setup-python@v2
         with:
@@ -34,7 +34,7 @@ jobs:
         run:
           pip install -r etc/requirements-aws.txt
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
