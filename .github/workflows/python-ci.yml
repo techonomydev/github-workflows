@@ -47,7 +47,7 @@ jobs:
         env:
           PYCURL_SSL_LIBRARY: openssl
         run: |
-          pip3 install -r https://raw.githubusercontent.com/techonomydev/github-workflows/next/bootstrap-requirements.txt
+          pip3 install -r https://raw.githubusercontent.com/techonomydev/github-workflows/master/bootstrap-requirements.txt
           make install
       - name: Lint with flake8 (black and isort)
         run: |
