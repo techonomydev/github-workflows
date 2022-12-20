@@ -10,6 +10,9 @@ on:
         type: string
       cloudfront_distribution_id:
         type: string
+      region:
+        type: string
+        default: "eu-west-1"
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -33,7 +36,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-1
+          aws-region: ${{ inputs.region }}
       - name: Sync static files to S3
         run:
           aws s3 sync ${{ inputs.artifact_path }} s3://${{ inputs.s3_bucket }} --acl public-read --delete
