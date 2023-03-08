@@ -25,13 +25,13 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v3
       - name: Set up Python ${{ inputs.python_version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
            python-version: '${{ inputs.python_version }}'
       - name: Sops Binary Installer
-        uses: mdgreenwald/mozilla-sops-action@v1
+        uses: mdgreenwald/mozilla-sops-action@v1.4.1
         with:
-          version: '3.7.2'
+          version: '3.7.3'
         id: install
       - name: Install AWS tools
         run:
