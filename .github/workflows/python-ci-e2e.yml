@@ -8,6 +8,14 @@ on:
       python_version:
         type: string
         required: true
+      pip_version:
+        type: string
+        required: false
+        default: '>=23,<23.1'
+      poetry_version:
+        type: string
+        required: false
+        default: '>=1.4.0,<1.5'
       artifact_name:
         type: string
       artifact_path:
@@ -56,7 +64,7 @@ jobs:
         env:
           PYCURL_SSL_LIBRARY: openssl
         run: |
-          pip3 install -r https://raw.githubusercontent.com/techonomydev/github-workflows/master/bootstrap-requirements.txt
+          pip3 install "pip${{ inputs.pip_version }}" "poetry${{ inputs.poetry_version }}"
           make install
       - name: Lint with flake8 (black and isort)
         run: |
