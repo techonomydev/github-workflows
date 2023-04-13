@@ -50,7 +50,7 @@ jobs:
           name: ${{ inputs.artifact_name }}
           path: ${{ inputs.artifact_path }}
       - name: Set up Python ${{ inputs.python_version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
            python-version: '${{ inputs.python_version }}'
       - name: Setup ssh:// to https:// mapping with a token
