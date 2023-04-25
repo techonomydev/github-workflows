@@ -11,19 +11,19 @@ on:
       pip_version:
         type: string
         required: false
-        default: '>=23,<23.1'
+        default: ">=23,<23.1"
       poetry_version:
         type: string
         required: false
-        default: '>=1.4.0,<1.5'
+        default: ">=1.4.0,<1.5"
       postgres_image:
         type: string
         required: false
-        default: 'postgres'
+        default: "postgres"
       database_protocol:
         type: string
         required: false
-        default: 'postgres'
+        default: "postgres"
       apt_extra_packages:
         type: string
         required: false
@@ -64,7 +64,7 @@ jobs:
       - name: Set up Python ${{ inputs.python_version }}
         uses: actions/setup-python@v4
         with:
-           python-version: '${{ inputs.python_version }}'
+          python-version: "${{ inputs.python_version }}"
       - name: Setup ssh:// to https:// mapping with a token
         run: |
           git config --global url."https://${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
@@ -84,13 +84,13 @@ jobs:
           make lint
       - name: Run the unit/functional testsuite
         env:
-          DATABASE_URL: '${{ inputs.database_protocol }}://postgres:postgres@localhost/${{ inputs.name }}'
+          DATABASE_URL: "${{ inputs.database_protocol }}://postgres:postgres@localhost/${{ inputs.name }}"
         run: |
           source $(poetry env info --path)/bin/activate
           make test
       - name: Run the e2e testsuite
         env:
-          DATABASE_URL: '${{ inputs.database_protocol }}://postgres:postgres@localhost/${{ inputs.name }}'
+          DATABASE_URL: "${{ inputs.database_protocol }}://postgres:postgres@localhost/${{ inputs.name }}"
           DJANGO_ALLOW_ASYNC_UNSAFE: true
         run: |
           source $(poetry env info --path)/bin/activate
