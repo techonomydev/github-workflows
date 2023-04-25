@@ -20,6 +20,10 @@ on:
         type: string
         required: false
         default: 'postgres'
+      database_protocol:
+        type: string
+        required: false
+        default: 'postgres'
       apt_extra_packages:
         type: string
         required: false
@@ -71,7 +75,7 @@ jobs:
           make lint
       - name: Run the unit/functional testsuite
         env:
-          DATABASE_URL: 'postgres://postgres:postgres@localhost/${{ inputs.name }}'
+          DATABASE_URL: '${{ inputs.database_protocol }}://postgres:postgres@localhost/${{ inputs.name }}'
         run: |
           source $(poetry env info --path)/bin/activate
           make test
