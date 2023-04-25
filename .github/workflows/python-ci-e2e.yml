@@ -16,6 +16,14 @@ on:
         type: string
         required: false
         default: '>=1.4.0,<1.5'
+      postgres_image:
+        type: string
+        required: false
+        default: 'postgres'
+      apt_extra_packages:
+        type: string
+        required: false
+        default: ""
       artifact_name:
         type: string
       artifact_path:
@@ -28,7 +36,7 @@ jobs:
   linting-and-tests:
     services:
       postgres:
-        image: postgres
+        image: ${{ inputs.postgres_image }}
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -59,7 +67,7 @@ jobs:
       - name: Install additional software
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y libssl-dev libcurl4-openssl-dev
+          sudo apt-get install -y libssl-dev libcurl4-openssl-dev ${{ inputs.apt_extra_packages }}
       - name: Install python dependencies
         env:
           PYCURL_SSL_LIBRARY: openssl
