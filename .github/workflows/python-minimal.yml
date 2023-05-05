@@ -1,0 +1,47 @@
+name: Python CI minimal
+on:
+  workflow_call:
+    inputs:
+      name:
+        type: string
+        required: true
+      python_version:
+        type: string
+        required: true
+      pip_version:
+        type: string
+        required: false
+        default: ">=23,<23.1"
+      poetry_version:
+        type: string
+        required: false
+        default: ">=1.4.0,<1.5"
+    secrets:
+      TECHONOMY_REPOS_GITHUB_TOKEN:
+        required: true
+
+jobs:
+  linting-and-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+      - name: Set up Python ${{ inputs.python_version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ inputs.python_version }}"
+      - name: Setup ssh:// to https:// mapping with a token
+        run: |
+          git config --global url."https://${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+      - name: Install python dependencies
+        run: |
+          pip install "pip${{ inputs.pip_version }}" "poetry${{ inputs.poetry_version }}"
+          make install
+      - name: Lint with flake8 (black and isort)
+        run: |
+          source $(poetry env info --path)/bin/activate
+          make lint
+      - name: Run the unit/functional testsuite
+        run: |
+          source $(poetry env info --path)/bin/activate
+          make test
