@@ -40,6 +40,6 @@ jobs:
       - name: Lint with prettier
         run: |
           npx yarn --cwd ${{ inputs.working_directory }} lint
-      - name: Test with jest
+      - name: Run yarn test
         run: |
           npx yarn --cwd ${{ inputs.working_directory }} test
