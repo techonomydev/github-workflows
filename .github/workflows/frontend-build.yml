@@ -15,6 +15,10 @@ on:
       node_version:
         type: string
         required: true
+      env_file:
+        type: string
+        default: ''
+        required: false
     secrets:
       PACKAGE_GITHUB_TOKEN:
         required: true
@@ -40,6 +44,12 @@ jobs:
       - name: Configure git
         run: |
           git config --global url."https://${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}@github.com/".insteadOf git@github.com:
+      - name: Configure environment file
+        if: ${{ inputs.env_file != '' }}
+        run: |
+          cp ${{ inputs.env_file }} .env
+          # Remove all potential other env files to avoid conflicts
+          rm .env.*
       - name: Install frontend dependencies
         run: |
           npx yarn --cwd  ${{ inputs.working_directory }} install
