@@ -63,8 +63,7 @@ jobs:
           PYCURL_SSL_LIBRARY: openssl
         run: |
           source $(poetry env info --path)/bin/activate
-          poetry version $(git describe --tags --abbrev=0)
-          poetry build
+          make dist
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
