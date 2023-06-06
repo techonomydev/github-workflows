@@ -18,8 +18,10 @@ on:
         default: ">=1.4.0,<1.5"
       artifact_name:
         type: string
+        required: false
       artifact_path:
         type: string
+        required: false
     secrets:
       TECHONOMY_REPOS_GITHUB_TOKEN:
         required: true
@@ -34,6 +36,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}
       - name: Download static files
+        if: "${{ inputs.artifact_name }}"
         uses: actions/download-artifact@v3
         with:
           name: ${{ inputs.artifact_name }}
