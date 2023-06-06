@@ -30,6 +30,9 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}
       - name: Download static files
         uses: actions/download-artifact@v3
         with:
