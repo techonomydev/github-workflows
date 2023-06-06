@@ -48,18 +48,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  frontend:
+  frontend-build:
     uses: techonomydev/github-workflows/.github/workflows/frontend-ci.yml@main
     with:
       working_directory: frontend
       node_version: 18
 
-  python:
-    needs: python-publish-package
+  python-publish-package:
+    needs: frontend
     uses: techonomydev/github-workflows/.github/workflows/python-publish-package.yml@main
     with:
       name: my-project
       artifact_name: static
       artifact_path: src/my_project/static/my_project
       python_version: 3.11
+    secrets:
+      TECHONOMY_REPOS_GITHUB_TOKEN: ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}
 ```
