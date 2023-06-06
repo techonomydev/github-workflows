@@ -7,17 +7,17 @@ Opinionated GitHub reusable workflow templates.
 
 ## Usage examples
 
+Python project with frontend and E2E tests.
+
 ```yaml
 name: CI
 
 on:
   push:
     branches:
-      - master
       - main
   pull_request:
     branches:
-      - master
       - main
 
 jobs:
@@ -33,7 +33,33 @@ jobs:
     with:
       name: my-project
       artifact_name: static
-      artifact_path: src/bmy_project/static/bmy_project
+      artifact_path: src/my_project/static/my_project
       python_version: 3.11
+```
 
+Publish a Python package.
+
+```yaml
+name: Publish package
+
+on:
+  release:
+    types: ["published"]
+  workflow_dispatch:
+
+jobs:
+  frontend:
+    uses: techonomydev/github-workflows/.github/workflows/frontend-ci.yml@main
+    with:
+      working_directory: frontend
+      node_version: 18
+
+  python:
+    needs: python-publish-package
+    uses: techonomydev/github-workflows/.github/workflows/python-publish-package.yml@main
+    with:
+      name: my-project
+      artifact_name: static
+      artifact_path: src/my_project/static/my_project
+      python_version: 3.11
 ```
