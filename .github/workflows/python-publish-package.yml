@@ -1,4 +1,4 @@
-name: Python CI
+name: Publish Python package
 on:
   workflow_call:
     inputs:
@@ -16,42 +16,25 @@ on:
         type: string
         required: false
         default: ">=1.4.0,<1.5"
-      postgres_image:
+      artifact_name:
         type: string
-        required: false
-        default: "postgres"
-      database_protocol:
+      artifact_path:
         type: string
-        required: false
-        default: "postgres"
-      apt_extra_packages:
-        type: string
-        required: false
-        default: ""
     secrets:
       TECHONOMY_REPOS_GITHUB_TOKEN:
         required: true
 
 jobs:
-  linting-and-tests:
-    services:
-      postgres:
-        image: ${{ inputs.postgres_image }}
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: ${{ inputs.name }}
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
+  publish-python-package:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
+      - name: Download static files
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: ${{ inputs.artifact_path }}
       - name: Set up Python ${{ inputs.python_version }}
         uses: actions/setup-python@v4
         with:
@@ -69,13 +52,16 @@ jobs:
         run: |
           pip3 install "pip${{ inputs.pip_version }}" "poetry${{ inputs.poetry_version }}"
           make install
-      - name: Lint with flake8 (black and isort)
-        run: |
-          source $(poetry env info --path)/bin/activate
-          make lint
-      - name: Run the unit/functional testsuite
+      - name: Build Python package
         env:
-          DATABASE_URL: "${{ inputs.database_protocol }}://postgres:postgres@localhost/${{ inputs.name }}"
+          PYCURL_SSL_LIBRARY: openssl
         run: |
           source $(poetry env info --path)/bin/activate
-          make test
+          poetry version $(git describe --tags --abbrev=0)
+          poetry build
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.name }}
+          path: dist
+          retention-days: 7
