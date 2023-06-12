@@ -51,7 +51,7 @@ jobs:
       - name: Install additional software
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y libssl-dev libcurl4-openssl-dev ${{ inputs.apt_extra_packages }}
+          sudo apt-get install -y libssl-dev libcurl4-openssl-dev gettext ${{ inputs.apt_extra_packages }}
       - name: Install Python dependencies
         env:
           PYCURL_SSL_LIBRARY: openssl
