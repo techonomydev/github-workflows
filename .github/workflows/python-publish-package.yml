@@ -22,8 +22,15 @@ on:
       artifact_path:
         type: string
         required: false
+      region:
+        type: string
+        default: "eu-west-1"
     secrets:
       TECHONOMY_REPOS_GITHUB_TOKEN:
+        required: true
+      AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY:
+        required: true
+      AWS_CODEARTIFACT_PRIMARY_ACCESS_SECRET:
         required: true
 
 jobs:
@@ -64,6 +71,21 @@ jobs:
         run: |
           source $(poetry env info --path)/bin/activate
           make dist
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_CODEARTIFACT_PRIMARY_ACCESS_SECRET }}
+          aws-region: ${{ inputs.region }}
+      - name: Upload package to AWS CodeArtifact (Private PyPI)
+        env:
+            POETRY_HTTP_BASIC_AWS_CODEARTIFACT_PRIMARY_USERNAME: aws
+            AWS_CODEARTIFACT_PRIMARY_PYPI_REPOSITORY_URL: ${{ vars.AWS_CODEARTIFACT_PRIMARY_PYPI_REPOSITORY_URL }}
+        run: |
+          echo "POETRY_HTTP_BASIC_AWS_CODEARTIFACT_PRIMARY_PASSWORD=$(aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --output text)" >> $GITHUB_ENV
+          source $(poetry env info --path)/bin/activate
+          poetry source add --secondary aws-codeartifact-primary $AWS_CODEARTIFACT_PRIMARY_PYPI_REPOSITORY_URL
+          poetry publish --repository aws-codeartifact-primary
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
