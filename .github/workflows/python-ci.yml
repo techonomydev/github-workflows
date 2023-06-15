@@ -28,6 +28,9 @@ on:
         type: string
         required: false
         default: ""
+      region:
+        type: string
+        default: "eu-west-1"
     secrets:
       TECHONOMY_REPOS_GITHUB_TOKEN:
         required: true
