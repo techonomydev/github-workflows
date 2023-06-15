@@ -32,8 +32,15 @@ on:
         type: string
       artifact_path:
         type: string
+      region:
+        type: string
+        default: "eu-west-1"
     secrets:
       TECHONOMY_REPOS_GITHUB_TOKEN:
+        required: true
+      AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY:
+        required: true
+      AWS_CODEARTIFACT_PRIMARY_ACCESS_SECRET:
         required: true
 
 jobs:
@@ -72,10 +79,20 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y libssl-dev libcurl4-openssl-dev ${{ inputs.apt_extra_packages }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_CODEARTIFACT_PRIMARY_ACCESS_SECRET }}
+          aws-region: ${{ inputs.region }}
       - name: Install Python dependencies
         env:
           PYCURL_SSL_LIBRARY: openssl
+          POETRY_HTTP_BASIC_AWS_CODEARTIFACT_PRIMARY_USERNAME: aws
+          AWS_CODEARTIFACT_PRIMARY_PYPI_REPOSITORY_URL: ${{ vars.AWS_CODEARTIFACT_PRIMARY_PYPI_REPOSITORY_URL }}
         run: |
+          export AWS_CODEARTIFACT_TOKEN="$(aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --output text)"
+          export POETRY_HTTP_BASIC_AWS_CODEARTIFACT_PRIMARY_SIMPLE_PASSWORD=$AWS_CODEARTIFACT_TOKEN
           pip3 install "pip${{ inputs.pip_version }}" "poetry${{ inputs.poetry_version }}"
           make install
       - name: Lint with flake8 (black and isort)
