@@ -79,7 +79,7 @@ jobs:
       - name: Install Python dependencies
         env:
           PYCURL_SSL_LIBRARY: openssl
-          POETRY_HTTP_BASIC_AWS_CODEARTIFACT_PRIMARY_USERNAME: aws
+          POETRY_HTTP_BASIC_AWS_CODEARTIFACT_PRIMARY_SIMPLE_USERNAME: aws
           AWS_CODEARTIFACT_PRIMARY_PYPI_REPOSITORY_URL: ${{ vars.AWS_CODEARTIFACT_PRIMARY_PYPI_REPOSITORY_URL }}
         run: |
           export AWS_CODEARTIFACT_TOKEN="$(aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --output text)"
