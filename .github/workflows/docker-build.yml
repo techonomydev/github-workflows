@@ -42,6 +42,6 @@ jobs:
         DOCKER_BUILDKIT: 1
       run: |
         echo ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }} > ./.GITHUB_TOKEN
-        aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --output text > ./.CODEARTIFACT_TOKEN
-        docker build --secret id=github_token,src=./.GITHUB_TOKEN --secret id=codeartifact_token,src=./.CODEARTIFACT_TOKEN --build-arg DJANGO_SETTINGS_MODULE="${{ inputs.django_settings_module }}" -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest . -f etc/docker/Dockerfile
+        aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --output text > ./.AWS_CODEARTIFACT_TOKEN
+        docker build --secret id=github_token,src=./.GITHUB_TOKEN --secret id=aws_codeartifact_token,src=./.AWS_CODEARTIFACT_TOKEN --build-arg DJANGO_SETTINGS_MODULE="${{ inputs.django_settings_module }}" -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest . -f etc/docker/Dockerfile
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
