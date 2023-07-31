@@ -35,9 +35,9 @@ on:
       TECHONOMY_REPOS_GITHUB_TOKEN:
         required: true
       AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY:
-        required: true
+        required: false
       AWS_CODEARTIFACT_PRIMARY_ACCESS_SECRET:
-        required: true
+        required: false
 
 jobs:
   linting-and-tests:
