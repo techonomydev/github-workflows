@@ -56,6 +56,8 @@ jobs:
         ports:
           - 5432:5432
     runs-on: ubuntu-latest
+    env:
+       AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY: ${{ secrets.AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -71,6 +73,7 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y libssl-dev libcurl4-openssl-dev ${{ inputs.apt_extra_packages }}
       - name: Configure AWS credentials
+        if: ${{ env.AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY }}
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY }}
