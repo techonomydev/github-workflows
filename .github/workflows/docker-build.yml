@@ -2,6 +2,9 @@ name: Docker build
 on:
   workflow_call:
     inputs:
+      environment:
+        type: string
+        default: "prd"
       ecr_repository:
         type: string
         required: true
@@ -43,5 +46,5 @@ jobs:
       run: |
         echo ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }} > ./.GITHUB_TOKEN
         aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --output text > ./.AWS_CODEARTIFACT_TOKEN
-        docker build --secret id=github_token,src=./.GITHUB_TOKEN --secret id=aws_codeartifact_token,src=./.AWS_CODEARTIFACT_TOKEN --build-arg DJANGO_SETTINGS_MODULE="${{ inputs.django_settings_module }}" -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest . -f etc/docker/Dockerfile
+        docker build --secret id=github_token,src=./.GITHUB_TOKEN --secret id=aws_codeartifact_token,src=./.AWS_CODEARTIFACT_TOKEN --build-arg ENVIRONMENT="${{ inputs.environment }}" --build-arg DJANGO_SETTINGS_MODULE="${{ inputs.django_settings_module }}" -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest . -f etc/docker/Dockerfile
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
