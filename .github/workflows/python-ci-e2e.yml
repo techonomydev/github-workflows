@@ -93,6 +93,8 @@ jobs:
           PYCURL_SSL_LIBRARY: openssl
           AWS_CODEARTIFACT_TOKEN_COMMAND: aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --duration-seconds 900 --output text
         run: |
+          # This token export command is here for legacy projects. This can be removed when all cookiecutted Django projects
+          # are updated with the use of $AWS_CODEARTIFACT_TOKEN_COMMAND
           export AWS_CODEARTIFACT_TOKEN="$(aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --output text)"
           pip3 install "pip${{ inputs.pip_version }}" "poetry${{ inputs.poetry_version }}"
           make install
