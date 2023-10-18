@@ -24,6 +24,10 @@ on:
 
 jobs:
   build-docker-image:
+    # Cancel any stale jobs
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     steps:
     - name: Checkout the repository
