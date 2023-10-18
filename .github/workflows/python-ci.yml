@@ -82,6 +82,7 @@ jobs:
       - name: Install Python dependencies
         env:
           PYCURL_SSL_LIBRARY: openssl
+          AWS_CODEARTIFACT_TOKEN_COMMAND: aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --duration-seconds 900 --output text
         run: |
           export AWS_CODEARTIFACT_TOKEN="$(aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --output text)"
           pip3 install "pip${{ inputs.pip_version }}" "poetry${{ inputs.poetry_version }}"
