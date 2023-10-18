@@ -45,10 +45,6 @@ on:
 
 jobs:
   linting-and-tests:
-    # Cancel any stale jobs
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: true
     services:
       postgres:
         image: ${{ inputs.postgres_image }}
