@@ -81,9 +81,10 @@ jobs:
         env:
             POETRY_HTTP_BASIC_AWS_CODEARTIFACT_PRIMARY_USERNAME: aws
             AWS_CODEARTIFACT_PRIMARY_PYPI_REPOSITORY_URL: ${{ vars.AWS_CODEARTIFACT_PRIMARY_PYPI_REPOSITORY_URL }}
+            AWS_CODEARTIFACT_TOKEN_COMMAND: aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --duration-seconds 900 --output text
         run: |
           source $(poetry env info --path)/bin/activate
-          export POETRY_HTTP_BASIC_AWS_CODEARTIFACT_PRIMARY_PASSWORD="$(aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --output text)"
+          poetry config http-basic.aws-codeartifact-primary aws $(eval $AWS_CODEARTIFACT_TOKEN_COMMAND)
           poetry source add --secondary aws-codeartifact-primary $AWS_CODEARTIFACT_PRIMARY_PYPI_REPOSITORY_URL
           poetry publish --repository aws-codeartifact-primary
       - name: Upload build artifacts
