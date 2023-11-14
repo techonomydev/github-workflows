@@ -38,6 +38,7 @@ jobs:
         with:
           node-version: ${{ inputs.node_version }}
       - name: Configure NPM package repository
+        working-directory: ${{ inputs.working_directory }}
         run: |
           npx yarn config set @techonomydev:registry https://npm.pkg.github.com/
           npm set https://npm.pkg.github.com/:_authToken ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}
@@ -51,11 +52,13 @@ jobs:
           # Remove all potential other env files to avoid conflicts
           rm .env.*
       - name: Install frontend dependencies
+        working-directory: ${{ inputs.working_directory }}
         run: |
-          npx yarn --cwd  ${{ inputs.working_directory }} install
+          npx yarn install
       - name: Build frontend artifacts
+        working-directory: ${{ inputs.working_directory }}
         run: |
-          npx yarn --cwd  ${{ inputs.working_directory }} build
+          npx yarn build
         env:
           DISABLE_ESLINT_PLUGIN: true
       - name: Upload build artifacts

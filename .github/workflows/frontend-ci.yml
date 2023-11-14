@@ -28,6 +28,7 @@ jobs:
         with:
           node-version: ${{ inputs.node_version }}
       - name: Configure NPM package repository
+        working-directory: ${{ inputs.working_directory }}
         run: |
           npx yarn config set @techonomydev:registry https://npm.pkg.github.com/
           npm set https://npm.pkg.github.com/:_authToken ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}
@@ -35,11 +36,14 @@ jobs:
         run: |
           git config --global url."https://${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}@github.com/".insteadOf git@github.com:
       - name: Install front-end dependencies
+        working-directory: ${{ inputs.working_directory }}
         run: |
-          npx yarn --cwd ${{ inputs.working_directory }} install
+          npx install
       - name: Lint with prettier
+        working-directory: ${{ inputs.working_directory }}
         run: |
-          npx yarn --cwd ${{ inputs.working_directory }} lint
+          npx yarn lint
       - name: Run yarn test
+        working-directory: ${{ inputs.working_directory }}
         run: |
-          npx yarn --cwd ${{ inputs.working_directory }} test
+          npx yarn test
