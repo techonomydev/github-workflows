@@ -38,7 +38,7 @@ jobs:
       - name: Install front-end dependencies
         working-directory: ${{ inputs.working_directory }}
         run: |
-          npx install
+          npx yarn install
       - name: Lint with prettier
         working-directory: ${{ inputs.working_directory }}
         run: |
