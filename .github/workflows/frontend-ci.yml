@@ -14,6 +14,8 @@ on:
         required: false
       TECHONOMY_REPOS_GITHUB_TOKEN:
         required: true
+      FONTAWESOME_NPM_AUTH_TOKEN:
+        required: false
 
 jobs:
   linting-and-tests:
@@ -32,6 +34,8 @@ jobs:
         run: |
           npx yarn config set @techonomydev:registry https://npm.pkg.github.com/
           npm set https://npm.pkg.github.com/:_authToken ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}
+          npm set @fortawesome:registry https://npm.fontawesome.com/
+          npm set //npm.fontawesome.com/:_authToken ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
       - name: Configure git
         run: |
           git config --global url."https://${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}@github.com/".insteadOf git@github.com:
