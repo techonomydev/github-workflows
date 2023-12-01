@@ -21,6 +21,8 @@ on:
         required: true
       TECHONOMY_REPOS_GITHUB_TOKEN:
         required: false
+      FONTAWESOME_NPM_AUTH_TOKEN:
+        required: false
 
 jobs:
   build-docker-image:
@@ -45,6 +47,7 @@ jobs:
         DOCKER_BUILDKIT: 1
       run: |
         echo ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }} > ./.GITHUB_TOKEN
+        echo ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }} > ./.FONTAWESOME_TOKEN
         aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --output text > ./.AWS_CODEARTIFACT_TOKEN
-        docker build --secret id=github_token,src=./.GITHUB_TOKEN --secret id=aws_codeartifact_token,src=./.AWS_CODEARTIFACT_TOKEN --build-arg ENVIRONMENT="${{ inputs.environment }}" --build-arg DJANGO_SETTINGS_MODULE="${{ inputs.django_settings_module }}" -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest . -f etc/docker/Dockerfile
+        docker build --secret id=fontawesome_token,src=./.FONTAWESOME_TOKEN --secret id=github_token,src=./.GITHUB_TOKEN --secret id=aws_codeartifact_token,src=./.AWS_CODEARTIFACT_TOKEN --build-arg ENVIRONMENT="${{ inputs.environment }}" --build-arg DJANGO_SETTINGS_MODULE="${{ inputs.django_settings_module }}" -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest . -f etc/docker/Dockerfile
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
