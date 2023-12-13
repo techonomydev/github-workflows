@@ -1,67 +1,14 @@
 # Techonomy GitHub Workflows
 
-Opinionated GitHub reusable workflow templates.
+Opinionated GitHub reusable workflow templates. These workflows are automatically used when you bootstrap a project with one of the cookiecutter projects:
 
-- Current production branch: `main`
-- Newest versions (pip/poetry) branch: `next`
+- https://github.com/techonomydev/cookiecutter-django-wagtail
+- https://github.com/techonomydev/cookiecutter-django-app
 
 ## Usage examples
 
-Python project with frontend and E2E tests.
+See for real-world examples the following links:
 
-```yaml
-name: CI
+- https://github.com/techonomydev/buurtsportcoach-planner/blob/main/.github/workflows/
+- https://github.com/techonomydev/techonomy-django-user/blob/main/.github/workflows/
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
-jobs:
-  frontend:
-    uses: techonomydev/github-workflows/.github/workflows/frontend-ci.yml@main
-    with:
-      working_directory: frontend
-      node_version: 18
-
-  python:
-    needs: frontend-build
-    uses: techonomydev/github-workflows/.github/workflows/python-ci-e2e.yml@main
-    with:
-      name: my-project
-      artifact_name: static
-      artifact_path: src/my_project/static/my_project
-      python_version: 3.11
-```
-
-Publish a Python package.
-
-```yaml
-name: Publish package
-
-on:
-  release:
-    types: ["published"]
-  workflow_dispatch:
-
-jobs:
-  frontend-build:
-    uses: techonomydev/github-workflows/.github/workflows/frontend-ci.yml@main
-    with:
-      working_directory: frontend
-      node_version: 18
-
-  python-publish-package:
-    needs: frontend
-    uses: techonomydev/github-workflows/.github/workflows/python-publish-package.yml@main
-    with:
-      name: my-project
-      artifact_name: static
-      artifact_path: src/my_project/static/my_project
-      python_version: 3.11
-    secrets:
-      TECHONOMY_REPOS_GITHUB_TOKEN: ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}
-```
