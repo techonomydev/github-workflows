@@ -80,7 +80,7 @@ jobs:
       - name: Install additional software
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y libssl-dev libcurl4-openssl-dev ${{ inputs.apt_extra_packages }}
+          sudo apt-get install -y libssl-dev libcurl4-openssl-dev gettext ${{ inputs.apt_extra_packages }}
       - name: Configure AWS credentials
         if: ${{ env.AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY }}
         uses: aws-actions/configure-aws-credentials@v2
