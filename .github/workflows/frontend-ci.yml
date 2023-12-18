@@ -43,6 +43,10 @@ jobs:
         working-directory: ${{ inputs.working_directory }}
         run: |
           npx yarn install
+      - name: Build the frontend
+        working-directory: ${{ inputs.working_directory }}
+        run: |
+          npx yarn build
       - name: Lint with prettier
         working-directory: ${{ inputs.working_directory }}
         run: |
