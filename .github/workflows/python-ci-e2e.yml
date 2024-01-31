@@ -119,5 +119,5 @@ jobs:
         run: |
           source $(poetry env info --path)/bin/activate
           poetry install -E playwright
-          playwright install ${{ inputs.playwright_browsers }}
+          playwright install --with-deps ${{ inputs.playwright_browsers }}
           pytest tests/e2e/
