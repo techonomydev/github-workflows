@@ -32,11 +32,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}
       - name: Setup node ${{ inputs.node_version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.node_version }}
       - name: Configure NPM package repository
@@ -66,7 +66,7 @@ jobs:
         env:
           DISABLE_ESLINT_PLUGIN: true
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.artifact_name }}
           path: ${{ inputs.artifact_path }}

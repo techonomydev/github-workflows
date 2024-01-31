@@ -64,14 +64,14 @@ jobs:
        AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY: ${{ secrets.AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Download static files
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifact_name }}
           path: ${{ inputs.artifact_path }}
       - name: Set up Python ${{ inputs.python_version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ inputs.python_version }}"
       - name: Setup ssh:// to https:// mapping with a token

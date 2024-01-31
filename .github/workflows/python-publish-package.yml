@@ -38,18 +38,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}
       - name: Download static files
         if: "${{ inputs.artifact_name }}"
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifact_name }}
           path: ${{ inputs.artifact_path }}
       - name: Set up Python ${{ inputs.python_version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ inputs.python_version }}"
       - name: Setup ssh:// to https:// mapping with a token
@@ -72,7 +72,7 @@ jobs:
           source $(poetry env info --path)/bin/activate
           make dist
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_CODEARTIFACT_PRIMARY_ACCESS_SECRET }}
@@ -88,7 +88,7 @@ jobs:
           poetry source add --secondary aws-codeartifact-primary $AWS_CODEARTIFACT_PRIMARY_PYPI_REPOSITORY_URL
           poetry publish --repository aws-codeartifact-primary
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.name }}
           path: dist
