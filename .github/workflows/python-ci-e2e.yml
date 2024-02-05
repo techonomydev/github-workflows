@@ -112,6 +112,8 @@ jobs:
         env:
           DATABASE_URL: "${{ inputs.database_protocol }}://postgres:postgres@localhost/${{ inputs.name }}"
           DJANGO_ALLOW_ASYNC_UNSAFE: true
+          PYCURL_SSL_LIBRARY: openssl
+          AWS_CODEARTIFACT_TOKEN_COMMAND: aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --duration-seconds 900 --output text
         run: |
           source $(poetry env info --path)/bin/activate
           make e2e-install e2e
