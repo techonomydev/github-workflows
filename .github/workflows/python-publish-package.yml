@@ -70,6 +70,9 @@ jobs:
           PYCURL_SSL_LIBRARY: openssl
         run: |
           source $(poetry env info --path)/bin/activate
+          # Compile translations, but ignore errors (make target may not be defined in all projects yet)
+          # TODO: Remove the || true part once all projects have the make target
+          make compilemessages || true
           make dist
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
