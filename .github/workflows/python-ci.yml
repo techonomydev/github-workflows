@@ -60,9 +60,9 @@ jobs:
        AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY: ${{ secrets.AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set up Python ${{ inputs.python_version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "${{ inputs.python_version }}"
       - name: Setup ssh:// to https:// mapping with a token
