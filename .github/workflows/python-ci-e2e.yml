@@ -98,11 +98,11 @@ jobs:
           export AWS_CODEARTIFACT_TOKEN="$(aws codeartifact get-authorization-token --domain techonomy-dev --domain-owner 718089050198 --query authorizationToken --output text)"
           pip3 install "pip${{ inputs.pip_version }}" "poetry${{ inputs.poetry_version }}"
           make install
-      - name: Lint with flake8 (black and isort)
+      - name: Run make lint
         run: |
           source $(poetry env info --path)/bin/activate
           make lint
-      - name: Run the unit/functional testsuite
+      - name: Run make test
         env:
           DATABASE_URL: "${{ inputs.database_protocol }}://postgres:postgres@localhost/${{ inputs.name }}"
         run: |
