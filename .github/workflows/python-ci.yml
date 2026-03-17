@@ -60,7 +60,7 @@ jobs:
        AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY: ${{ secrets.AWS_CODEARTIFACT_PRIMARY_ACCESS_KEY }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up Python ${{ inputs.python_version }}
         uses: actions/setup-python@v6
         with:

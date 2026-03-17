@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.TECHONOMY_REPOS_GITHUB_TOKEN }}
       - name: Setup node ${{ inputs.node_version }}
