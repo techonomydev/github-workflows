@@ -91,7 +91,7 @@ jobs:
           poetry source add --secondary aws-codeartifact-primary $AWS_CODEARTIFACT_PRIMARY_PYPI_REPOSITORY_URL
           poetry publish --repository aws-codeartifact-primary
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.name }}
           path: dist
